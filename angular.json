@@ -105,6 +105,37 @@
           }
         }
       }
+    },
+    "@app-smart-test/api": {
+      "projectType": "library",
+      "root": "projects/app-smart-test/api",
+      "sourceRoot": "projects/app-smart-test/api/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/app-smart-test/api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/app-smart-test/api/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/app-smart-test/api/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/app-smart-test/api/src/test.ts",
+            "tsConfig": "projects/app-smart-test/api/tsconfig.spec.json",
+            "karmaConfig": "projects/app-smart-test/api/karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "app-smart-test"

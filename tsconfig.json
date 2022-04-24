@@ -2,6 +2,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "@app-smart-test/api": ["projects/app-smart-test/api/index"],
+      "@app-smart-test/api/*": ["projects/app-smart-test/api/*"]
+    },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
