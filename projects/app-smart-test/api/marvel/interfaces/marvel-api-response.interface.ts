@@ -1,19 +1,13 @@
-export interface MarvelApiResponse<T extends MarvelApiBaseResult> {
+import {MarvelBaseItem} from "@app-smart-test/entities";
+
+export interface MarvelApiResponse<T extends MarvelBaseItem> {
   data: MarvelApiResponseData<T>;
 }
 
-export interface MarvelApiResponseData<T extends MarvelApiBaseResult> {
+export interface MarvelApiResponseData<T extends MarvelBaseItem> {
   results: T[];
-}
-
-export interface MarvelApiBaseResult {
-  id: number;
-}
-
-export interface MarvelCharacter extends MarvelApiBaseResult{
-  name: string;
-}
-
-export interface MarvelComics extends MarvelApiBaseResult{
-  title: string;
+  count: number;
+  limit: number;
+  offset: number;
+  total: number;
 }
