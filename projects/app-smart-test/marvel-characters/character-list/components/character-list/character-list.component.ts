@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
-import {filter, map, Subject, takeUntil} from "rxjs";
+import {ChangeDetectionStrategy, Component, ElementRef, HostListener, OnDestroy} from '@angular/core';
+import {BehaviorSubject, debounceTime, filter, map, Subject, takeUntil} from "rxjs";
 import {MarvelApiResponse, MarvelApiService} from "@app-smart-test/api";
 import {Store} from "@ngrx/store";
 import {characters, CharactersState, loadCharacters} from "@app-smart-test/contexts";
@@ -15,13 +15,49 @@ export class CharacterListComponent implements OnDestroy {
 
   title = 'app-smart-test loading';
 
+  public rows: any[];
+
+  public get width(): number {
+    return window.innerWidth;
+  }
+
+  public get cellsCount(): number {
+    return Math.floor(this.width / this.cellMinWidth);
+  }
+
+  public get rowsCount(): number {
+    const aspect: number = this.cellWidth / this.cellHeight;
+    return Math.floor(this.cellsCount * aspect);
+  }
+
+  public get rowHeight(): number {
+    const aspect: number = this.cellWidth / this.cellHeight;
+    return this.cellMinWidth / aspect;
+  }
+
+  public get cells(): any[] {
+    return new Array(this.cellsCount);
+  }
+
+  private cellWidth: number = 3;
+  private cellHeight: number = 4;
+  public readonly cellMinWidth: number = 250;
+
   private destroy$: Subject<void> = new Subject();
+
+  private endScroll$: Subject<void> = new Subject();
+
+  private loadCharacters$: BehaviorSubject<void> = new BehaviorSubject<void>(void 0);
+
+  private characters: MarvelCharacter[] = [];
 
   constructor(
     private apiService: MarvelApiService,
-    private readonly store: Store<any>
+    private readonly store: Store<any>,
+    private elementRef: ElementRef,
   ) {
-    store.dispatch(loadCharacters({ offset: 10, limit: 5 }));
+    console.log('width: ', this.width);
+    console.log('count: ', this.cells.length);
     store.select(characters).pipe(
       takeUntil(this.destroy$),
       map((state: CharactersState) => {
@@ -35,8 +71,9 @@ export class CharacterListComponent implements OnDestroy {
       filter(Boolean),
     ).subscribe(
       (results: MarvelCharacter[]) => {
-        console.log('Characters')
-        console.log(results.map(item => item.name));
+        this.characters = [...this.characters, ...results.map(item => item)];
+        console.log('Characters');
+        console.log(this.characters.map(item => item));
       },
       (error) => {
         console.error(error);
@@ -55,6 +92,32 @@ export class CharacterListComponent implements OnDestroy {
         console.error(error);
       }
     );
+
+    this.endScroll$.pipe(
+      debounceTime(100),
+    ).subscribe(
+      () => {
+        console.log('end scroll');
+        this.loadCharacters$.next();
+      },
+    );
+
+    this.rows = new Array(this.rowsCount);
+    this.loadCharacters$.subscribe(
+      () => {
+        this.store.dispatch(loadCharacters({
+          offset: this.characters.length,
+          limit: 10,
+        }));
+      }
+    )
+  }
+
+  @HostListener('wheel', ['$event'])
+  public wheel() {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      this.endScroll$.next();
+    }
   }
 
   ngOnDestroy() {

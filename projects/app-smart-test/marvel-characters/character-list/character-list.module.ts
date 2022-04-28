@@ -4,6 +4,7 @@ import { CharacterBoardComponent } from './components/character-board/character-
 import {RouterModule, Routes} from "@angular/router";
 import {MarvelStoreModule} from "@app-smart-test/contexts";
 import { CharacterComponent } from './components/character/character.component';
+import {CommonModule} from "@angular/common";
 
 const routers: Routes = [
   {
@@ -28,6 +29,7 @@ const routers: Routes = [
   imports: [
     RouterModule.forChild(routers),
     MarvelStoreModule,
+    CommonModule,
   ],
   declarations: [
     CharacterListComponent,

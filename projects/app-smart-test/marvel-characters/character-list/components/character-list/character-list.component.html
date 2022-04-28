@@ -1,2 +1,15 @@
 {{title}}
 <button (click)="load()">Load</button>
+<div class="list">
+  <div
+    class="row"
+    *ngFor="let row of rows"
+    [style.height]="rowHeight + 'px'"
+  >
+    <lib-character
+      class="cell"
+      [style.width]="cellMinWidth + 'px'"
+      *ngFor="let cell of cells"
+    ></lib-character>
+  </div>
+</div>
