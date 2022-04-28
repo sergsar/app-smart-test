@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -15,8 +16,11 @@ import {EffectsModule} from "@ngrx/effects";
     AppRoutingModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

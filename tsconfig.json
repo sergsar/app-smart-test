@@ -10,7 +10,11 @@
         "projects/app-smart-test/contexts/*"
       ],
       "@app-smart-test/entities": ["projects/app-smart-test/entities/index"],
-      "@app-smart-test/entities/*": ["projects/app-smart-test/entities/*"],
+      "@app-smart-test/entities/*": [
+        "projects/app-smart-test/entities/*"
+      ],
+      "@app-smart-test/marvel-characters": ["projects/app-smart-test/marvel-characters/index"],
+      "@app-smart-test/marvel-characters/*": ["projects/app-smart-test/marvel-characters/*"],
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
