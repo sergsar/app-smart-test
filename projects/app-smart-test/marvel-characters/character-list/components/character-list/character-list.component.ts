@@ -8,7 +8,7 @@ import {MarvelCharacter, MarvelComics} from "@app-smart-test/entities";
 @Component({
   selector: 'lib-character-list',
   templateUrl: './character-list.component.html',
-  styleUrls: ['./character-list.component.css'],
+  styleUrls: ['./character-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CharacterListComponent implements OnDestroy {
@@ -22,12 +22,12 @@ export class CharacterListComponent implements OnDestroy {
   }
 
   public get cellsCount(): number {
-    return Math.floor(this.width / this.cellMinWidth);
+    return Math.floor(this.width / this.cellMinWidth) || 1;
   }
 
   public get rowsCount(): number {
     const aspect: number = this.cellWidth / this.cellHeight;
-    return Math.floor(this.cellsCount * aspect);
+    return Math.ceil(this.cellsCount * aspect) + 1;
   }
 
   public get rowHeight(): number {
@@ -40,8 +40,8 @@ export class CharacterListComponent implements OnDestroy {
   }
 
   private cellWidth: number = 3;
-  private cellHeight: number = 4;
-  public readonly cellMinWidth: number = 250;
+  private cellHeight: number = 5;
+  public readonly cellMinWidth: number = 150;
 
   private destroy$: Subject<void> = new Subject();
 
