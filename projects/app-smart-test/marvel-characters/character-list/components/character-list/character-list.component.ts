@@ -1,9 +1,12 @@
 import {ChangeDetectionStrategy, Component, HostListener, OnDestroy} from '@angular/core';
-import {BehaviorSubject, debounceTime, filter, map, Subject, takeUntil} from "rxjs";
-import {MarvelApiResponse, MarvelApiService} from "@app-smart-test/api";
+import {debounceTime, filter, map, Subject, takeUntil} from "rxjs";
+import {MarvelApiService} from "@app-smart-test/api";
 import {Store} from "@ngrx/store";
 import {characters, CharactersState, loadCharacters} from "@app-smart-test/contexts";
-import {MarvelCharacter, MarvelComics} from "@app-smart-test/entities";
+import {MarvelCharacter} from "@app-smart-test/entities";
+import {
+  CharacterListDimensions
+} from "../../classes/character-list-dimensions";
 
 @Component({
   selector: 'lib-character-list',
@@ -17,42 +20,17 @@ export class CharacterListComponent implements OnDestroy {
 
   public rows: any[];
 
-  public get width(): number {
-    return document.body.clientWidth;
-  }
-
-  public get height(): number {
-    return window.innerHeight;
-  }
-
-  public get cellsCount(): number {
-    return Math.floor(this.width / this.cellMinWidth) || 1;
-  }
-
-  public get rowsCount(): number {
-    const aspect: number = this.cellWidth / this.cellHeight;
-    const height: number = this.cellMinWidth / aspect;
-    return Math.ceil(this.height / height) + 1;
-  }
-
-  public get rowHeight(): number {
-    const aspect: number = this.cellWidth / this.cellHeight;
-    return this.cellMinWidth / aspect;
-  }
-
   public get cells(): any[] {
-    return new Array(this.cellsCount);
+    return new Array(this.dimensions.cellsCount);
   }
 
-  private cellWidth: number = 3;
-  private cellHeight: number = 5;
-  public readonly cellMinWidth: number = 350;
+  public dimensions: CharacterListDimensions;
 
   private destroy$: Subject<void> = new Subject();
 
   private endScroll$: Subject<void> = new Subject();
 
-  private loadCharacters$: BehaviorSubject<void> = new BehaviorSubject<void>(void 0);
+  private loadCharacters$: Subject<void> = new Subject<void>();
 
   private characters: MarvelCharacter[] = [];
 
@@ -60,12 +38,17 @@ export class CharacterListComponent implements OnDestroy {
     private apiService: MarvelApiService,
     private readonly store: Store<any>,
   ) {
-    console.log('width: ', this.width);
-    console.log('height: ', this.height);
+    this.dimensions = new CharacterListDimensions(
+      document.body.clientWidth,
+      window.innerHeight,
+    );
+    console.log('width: ', this.dimensions.width);
+    console.log('height: ', this.dimensions.height);
     console.log('count: ', this.cells.length);
     const isMobile = (navigator as any)?.userAgentData?.mobile;
     console.log('mobile: ', isMobile);
     // this.cellMinWidth = isMobile ? 150 : 350;
+    store.dispatch(loadCharacters({}));
     store.select(characters).pipe(
       takeUntil(this.destroy$),
       map((state: CharactersState) => {
@@ -79,7 +62,7 @@ export class CharacterListComponent implements OnDestroy {
       filter(Boolean),
     ).subscribe(
       (results: MarvelCharacter[]) => {
-        this.characters = [...this.characters, ...results.map(item => item)];
+        this.characters = results;
         console.log('Characters');
         console.log(this.characters.map(item => item));
       },
@@ -89,17 +72,17 @@ export class CharacterListComponent implements OnDestroy {
       }
     );
 
-    apiService.getComics('1011334', { limit: 10, offset: 10 }).pipe(
-      takeUntil(this.destroy$),
-    ).subscribe(
-      (result: MarvelApiResponse<MarvelComics>) => {
-        console.log('Comics');
-        console.log(result.data.results.map(item => item.title));
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+    // apiService.getComics('1011334', { limit: 10, offset: 10 }).pipe(
+    //   takeUntil(this.destroy$),
+    // ).subscribe(
+    //   (result: MarvelApiResponse<MarvelComics>) => {
+    //     console.log('Comics');
+    //     console.log(result.data.results.map(item => item.title));
+    //   },
+    //   (error) => {
+    //     console.error(error);
+    //   }
+    // );
 
     this.endScroll$.pipe(
       debounceTime(100),
@@ -110,15 +93,26 @@ export class CharacterListComponent implements OnDestroy {
       },
     );
 
-    this.rows = new Array(this.rowsCount);
+    this.rows = new Array(this.dimensions.rowsCount);
     this.loadCharacters$.subscribe(
       () => {
         this.store.dispatch(loadCharacters({
-          offset: this.characters.length,
+          offset: 20,
           limit: 10,
         }));
       }
-    )
+    );
+
+    // this.characters$ = of(null).pipe(
+    //   switchMap(() => {
+    //     const items: MarvelCharacter[] = [];
+    //     return this.loadCharacters$.pipe(
+    //       switchMap(() => {
+    //
+    //       }),
+    //     )
+    //   })
+    // );
   }
 
   @HostListener('wheel', ['$event'])
@@ -130,9 +124,5 @@ export class CharacterListComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.destroy$.next();
-  }
-
-  load() {
-    this.store.dispatch(loadCharacters({}));
   }
 }

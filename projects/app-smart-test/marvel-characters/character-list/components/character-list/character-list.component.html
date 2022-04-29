@@ -3,11 +3,11 @@
   <div
     class="row"
     *ngFor="let row of rows"
-    [style.height]="rowHeight + 'px'"
+    [style.height]="dimensions.rowHeight + 'px'"
   >
     <lib-character
       class="cell"
-      [style.width]="cellMinWidth + 'px'"
+      [style.width]="dimensions.cellMinWidth + 'px'"
       *ngFor="let cell of cells"
     ></lib-character>
   </div>
