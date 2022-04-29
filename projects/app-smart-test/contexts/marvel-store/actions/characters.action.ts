@@ -13,19 +13,21 @@ const ns: createNsFn = createNsType('[MARVEL CHARACTERS]');
 
 export const loadCharactersSuccess = createAction(
   ns('Load marvel characters success'),
-  props<{ content: MarvelCharacter[], pagination: PaginationData }>(),
+  props<{
+    cache: MarvelCharacter[],
+    content: MarvelCharacter[],
+    summary: MarvelCharacter[],
+    pagination: PaginationData
+  }>(),
 );
 export const loadCharactersFailure = createAction(
   ns('Load marvel characters failure'),
-  props<{ error: unknown }>(),
+  props<{
+    error: unknown,
+    cache: MarvelCharacter[],
+  }>(),
 );
 export const loadCharacters = createAction(
   ns('Load marvel characters'),
   props<BasePayload>(),
-);
-export const loadingCharacters = createAction(
-  ns('Loading marvel characters'),
-);
-export const needReloadCharacters = createAction(
-  ns('Need reload marvel characters'),
 );
