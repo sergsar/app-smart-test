@@ -5,8 +5,12 @@
   .row {
     display: flex;
     flex-direction: row;
+    :hover {
+      border: 1px solid lightgreen;
+    }
   }
   .cell {
+
     flex: 1 0 auto;
     margin: 2px;
   }

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, HostListener, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostListener, OnDestroy} from '@angular/core';
 import {BehaviorSubject, debounceTime, filter, map, Subject, takeUntil} from "rxjs";
 import {MarvelApiResponse, MarvelApiService} from "@app-smart-test/api";
 import {Store} from "@ngrx/store";
@@ -54,10 +54,12 @@ export class CharacterListComponent implements OnDestroy {
   constructor(
     private apiService: MarvelApiService,
     private readonly store: Store<any>,
-    private elementRef: ElementRef,
   ) {
     console.log('width: ', this.width);
     console.log('count: ', this.cells.length);
+    const isMobile = (navigator as any)?.userAgentData?.mobile;
+    console.log('mobile: ', isMobile);
+    this.cellMinWidth = isMobile ? 150 : 350;
     store.select(characters).pipe(
       takeUntil(this.destroy$),
       map((state: CharactersState) => {
