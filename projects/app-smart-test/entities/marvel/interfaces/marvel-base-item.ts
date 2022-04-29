@@ -4,6 +4,11 @@ export interface MarvelBaseItem {
 
 export interface MarvelCharacter extends MarvelBaseItem {
   name: string;
+  description: string;
+  thumbnail: {
+    extension: string,
+    path: string,
+  };
 }
 
 export interface MarvelComics extends MarvelBaseItem {

@@ -120,7 +120,7 @@
       "projectType": "library",
       "root": "projects/app-smart-test/api",
       "sourceRoot": "projects/app-smart-test/api/src",
-      "prefix": "lib",
+      "prefix": "api",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -151,7 +151,7 @@
       "projectType": "library",
       "root": "projects/app-smart-test/contexts",
       "sourceRoot": "projects/app-smart-test/contexts/src",
-      "prefix": "lib",
+      "prefix": "context",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -182,7 +182,7 @@
       "projectType": "library",
       "root": "projects/app-smart-test/entities",
       "sourceRoot": "projects/app-smart-test/entities/src",
-      "prefix": "lib",
+      "prefix": "entity",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -211,9 +211,9 @@
     },
     "@app-smart-test/marvel-charqacters": {
       "projectType": "library",
-      "root": "projects/app-smart-test/marvel-charqacters",
-      "sourceRoot": "projects/app-smart-test/marvel-charqacters/src",
-      "prefix": "lib",
+      "root": "projects/app-smart-test/marvel-characters",
+      "sourceRoot": "projects/app-smart-test/marvel-characters/src",
+      "prefix": "marvel",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
