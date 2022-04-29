@@ -18,7 +18,11 @@ export class CharacterListComponent implements OnDestroy {
   public rows: any[];
 
   public get width(): number {
-    return window.innerWidth;
+    return document.body.clientWidth;
+  }
+
+  public get height(): number {
+    return window.innerHeight;
   }
 
   public get cellsCount(): number {
@@ -27,7 +31,8 @@ export class CharacterListComponent implements OnDestroy {
 
   public get rowsCount(): number {
     const aspect: number = this.cellWidth / this.cellHeight;
-    return Math.ceil(this.cellsCount * aspect) + 1;
+    const height: number = this.cellMinWidth / aspect;
+    return Math.ceil(this.height / height) + 1;
   }
 
   public get rowHeight(): number {
@@ -41,7 +46,7 @@ export class CharacterListComponent implements OnDestroy {
 
   private cellWidth: number = 3;
   private cellHeight: number = 5;
-  public readonly cellMinWidth: number = 150;
+  public readonly cellMinWidth: number = 350;
 
   private destroy$: Subject<void> = new Subject();
 
@@ -56,10 +61,11 @@ export class CharacterListComponent implements OnDestroy {
     private readonly store: Store<any>,
   ) {
     console.log('width: ', this.width);
+    console.log('height: ', this.height);
     console.log('count: ', this.cells.length);
     const isMobile = (navigator as any)?.userAgentData?.mobile;
     console.log('mobile: ', isMobile);
-    this.cellMinWidth = isMobile ? 150 : 350;
+    // this.cellMinWidth = isMobile ? 150 : 350;
     store.select(characters).pipe(
       takeUntil(this.destroy$),
       map((state: CharactersState) => {
