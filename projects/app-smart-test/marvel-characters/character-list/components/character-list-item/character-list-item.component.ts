@@ -2,12 +2,12 @@ import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {Character} from "../../interfaces/character.interface";
 
 @Component({
-  selector: 'marvel-character',
-  templateUrl: './character.component.html',
-  styleUrls: ['./character.component.scss'],
+  selector: 'marvel-character-list-item',
+  templateUrl: './character-list-item.component.html',
+  styleUrls: ['./character-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CharacterComponent implements OnInit {
+export class CharacterListItemComponent implements OnInit {
 
   @Input()
   public model?: Character;

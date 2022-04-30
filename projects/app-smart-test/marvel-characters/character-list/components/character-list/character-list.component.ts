@@ -8,6 +8,7 @@ import {
   CharacterListDimensions
 } from "../../classes/character-list-dimensions";
 import {Character} from "../../interfaces/character.interface";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'marvel-character-list',
@@ -29,8 +30,10 @@ export class CharacterListComponent implements OnDestroy {
   private characters: MarvelCharacter[] = [];
 
   constructor(
-    private apiService: MarvelApiService,
+    private readonly apiService: MarvelApiService,
     private readonly store: Store<any>,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
   ) {
     const isMobile = (navigator as any)?.userAgentData?.mobile;
     console.log('mobile: ', isMobile);
@@ -106,8 +109,12 @@ export class CharacterListComponent implements OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.destroy$.next();
+  }
+
+  public click(): void {
+
   }
 
   private dispatchLoadNext() {

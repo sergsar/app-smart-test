@@ -7,13 +7,14 @@
   >
     <div
       class="cell"
+      (click)="click"
       [style.width]="dimensions.cellMinWidth + 'px'"
       *ngFor="let cell of row"
     >
-      <marvel-character
+      <marvel-character-list-item
         *ngIf="cell"
         [model]="cell"
-      ></marvel-character>
+      ></marvel-character-list-item>
     </div>
   </div>
 </div>
