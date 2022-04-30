@@ -5,6 +5,8 @@ import {RouterModule, Routes} from "@angular/router";
 import {MarvelStoreModule} from "@app-smart-test/contexts";
 import { CharacterListItemComponent } from './components/character-list-item/character-list-item.component';
 import {CommonModule} from "@angular/common";
+import { CharacterComponent } from './components/character/character.component';
+import {CharacterListService} from "@app-smart-test/marvel-characters/character-list/services/character-list.service";
 
 const routers: Routes = [
   {
@@ -15,7 +17,7 @@ const routers: Routes = [
         path: 'character-list',
         component: CharacterListComponent,
       },
-      {path: 'character/:id', component: CharacterListItemComponent },
+      { path: 'character/:id', component: CharacterComponent },
       {
         path: '**',
         pathMatch: 'full',
@@ -34,8 +36,10 @@ const routers: Routes = [
   declarations: [
     CharacterListComponent,
     CharacterBoardComponent,
-    CharacterListItemComponent
+    CharacterListItemComponent,
+    CharacterComponent
   ],
+  providers: [CharacterListService],
 })
 export class CharacterListModule {
 

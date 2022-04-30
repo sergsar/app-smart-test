@@ -7,7 +7,7 @@
   >
     <div
       class="cell"
-      (click)="click"
+      (click)="click(cell.id)"
       [style.width]="dimensions.cellMinWidth + 'px'"
       *ngFor="let cell of row"
     >

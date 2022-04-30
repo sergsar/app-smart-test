@@ -1,14 +1,16 @@
 import {ChangeDetectionStrategy, Component, HostListener, OnDestroy} from '@angular/core';
-import {BehaviorSubject, catchError, debounceTime, filter, map, Observable, of, Subject, takeUntil} from "rxjs";
-import {MarvelApiService} from "@app-smart-test/api";
-import {Store} from "@ngrx/store";
-import {characters, CharactersState, loadCharacters} from "@app-smart-test/contexts";
-import {MarvelCharacter} from "@app-smart-test/entities";
+import {
+  BehaviorSubject, catchError,
+  debounceTime,
+  Observable, of,
+  Subject,
+} from "rxjs";
 import {
   CharacterListDimensions
 } from "../../classes/character-list-dimensions";
 import {Character} from "../../interfaces/character.interface";
 import {ActivatedRoute, Router} from "@angular/router";
+import {CharacterListService} from "../../services/character-list.service";
 
 @Component({
   selector: 'marvel-character-list',
@@ -25,15 +27,12 @@ export class CharacterListComponent implements OnDestroy {
 
   private endScroll$: Subject<void> = new Subject();
 
-  private loadCharacters$: BehaviorSubject<void> = new BehaviorSubject<void>(void 0);
-
-  private characters: MarvelCharacter[] = [];
+  private loadNextCharacters$: BehaviorSubject<void> = new BehaviorSubject<void>(void 0);
 
   constructor(
-    private readonly apiService: MarvelApiService,
-    private readonly store: Store<any>,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly characterListService: CharacterListService,
   ) {
     const isMobile = (navigator as any)?.userAgentData?.mobile;
     console.log('mobile: ', isMobile);
@@ -46,40 +45,10 @@ export class CharacterListComponent implements OnDestroy {
     console.log('height: ', this.dimensions.height);
     console.log('count: ', this.dimensions.cellsCount);
 
-    this.model$ = store.select(characters).pipe(
-      map((state: CharactersState) => {
-        console.log('state: ', state);
-        if (state.state === 'error') {
-          throw state.error;
-        }
-        return state.content as MarvelCharacter[];
-      }),
-      filter(Boolean),
-      map((results: MarvelCharacter[]) => {
-        this.characters = [...this.characters, ...results];
-
-        const tree: Character[][] = [];
-        const rowsCount: number = Math.ceil(this.characters.length / this.dimensions.cellsCount);
-        for (let i = 0; i < rowsCount; i++) {
-          const startIndex: number = this.dimensions.cellsCount * i;
-          const row: MarvelCharacter[] = this.characters.slice(startIndex, startIndex + this.dimensions.cellsCount);
-          const container: MarvelCharacter[] = new Array(this.dimensions.cellsCount);
-          Object.assign(container, row);
-          tree[i] = container.map((item: MarvelCharacter) => {
-            return {
-              name: item.name,
-              description: item.description,
-              thumbnail: {
-                extension: item.thumbnail.extension,
-                path: item.thumbnail.path,
-              },
-            };
-          });
-        }
-        console.log('Characters');
-        console.log(this.characters);
-        return tree;
-      }),
+    this.model$ = this.characterListService.getCharactersNext(
+      this.dimensions,
+      this.loadNextCharacters$,
+    ).pipe(
       catchError((err) => {
         console.error(err);
         return of([]);
@@ -91,19 +60,13 @@ export class CharacterListComponent implements OnDestroy {
     ).subscribe(
       () => {
         console.log('end scroll');
-        this.loadCharacters$.next();
+        this.loadNextCharacters$.next();
       },
-    );
-
-    this.loadCharacters$.subscribe(
-      () => {
-        this.dispatchLoadNext();
-      }
     );
   }
 
   @HostListener('document:scroll', ['$event'])
-  public wheel() {
+  public scroll() {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight * 2 / 3) {
       this.endScroll$.next();
     }
@@ -113,14 +76,10 @@ export class CharacterListComponent implements OnDestroy {
     this.destroy$.next();
   }
 
-  public click(): void {
-
-  }
-
-  private dispatchLoadNext() {
-    this.store.dispatch(loadCharacters({
-      offset: this.characters.length,
-      limit: this.dimensions.cellsCount * this.dimensions.rowsCount,
-    }));
+  public click(cellId: string): void {
+    this.router.navigate(
+      ['character', cellId],
+      { relativeTo: this.route.parent },
+    );
   }
 }
