@@ -62,10 +62,10 @@ export class MarvelApiService {
     if (!params) {
       return params;
     }
-    let filtered: MarvelRequestParams = {};
+    let filtered: any = {};
     (Object.keys(params) as (keyof MarvelRequestParams)[])
       .forEach((key: keyof MarvelRequestParams) => {
-      if (params[key] != undefined) {
+      if (params[key] !== undefined) {
         filtered[key] = params[key];
       }
     });
