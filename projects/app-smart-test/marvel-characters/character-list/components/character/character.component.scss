@@ -8,18 +8,20 @@
   .item {
     color: white;
     display: flex;
-    flex: 1 0 auto;
     &.text {
-      padding-left: 8px;
+      text-align: left;
+      padding: 0px 16px 0px 16px;
     }
     &.name {
-      font-size: medium;
+      font-size: initial;
+      height: 7%;
     }
     &.description {
-      font-size: x-small;
+      font-size: small;
     }
     &.image {
       height: 75%;
+      padding: 8px;
     }
   }
   p {
