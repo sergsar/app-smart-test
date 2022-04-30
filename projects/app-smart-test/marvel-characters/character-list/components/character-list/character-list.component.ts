@@ -54,12 +54,15 @@ export class CharacterListComponent implements OnDestroy {
       filter(Boolean),
       map((results: MarvelCharacter[]) => {
         this.characters = [...this.characters, ...results];
+
         const tree: Character[][] = [];
         const rowsCount: number = Math.ceil(this.characters.length / this.dimensions.cellsCount);
         for (let i = 0; i < rowsCount; i++) {
           const startIndex: number = this.dimensions.cellsCount * i;
           const row: MarvelCharacter[] = this.characters.slice(startIndex, startIndex + this.dimensions.cellsCount);
-          tree[i] = row.map((item: MarvelCharacter) => {
+          const container: MarvelCharacter[] = new Array(this.dimensions.cellsCount);
+          Object.assign(container, row);
+          tree[i] = container.map((item: MarvelCharacter) => {
             return {
               name: item.name,
               description: item.description,
@@ -91,22 +94,26 @@ export class CharacterListComponent implements OnDestroy {
 
     this.loadCharacters$.subscribe(
       () => {
-        this.store.dispatch(loadCharacters({
-          offset: this.characters.length,
-          limit: this.dimensions.cellsCount * this.dimensions.rowsCount,
-        }));
+        this.dispatchLoadNext();
       }
     );
   }
 
   @HostListener('document:scroll', ['$event'])
   public wheel() {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight * 2 / 3) {
       this.endScroll$.next();
     }
   }
 
   ngOnDestroy() {
     this.destroy$.next();
+  }
+
+  private dispatchLoadNext() {
+    this.store.dispatch(loadCharacters({
+      offset: this.characters.length,
+      limit: this.dimensions.cellsCount * this.dimensions.rowsCount,
+    }));
   }
 }

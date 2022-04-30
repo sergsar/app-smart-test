@@ -5,11 +5,15 @@
     *ngFor="let row of model"
     [style.height]="dimensions.rowHeight + 'px'"
   >
-    <marvel-character
+    <div
       class="cell"
-      [model]="cell"
       [style.width]="dimensions.cellMinWidth + 'px'"
       *ngFor="let cell of row"
-    ></marvel-character>
+    >
+      <marvel-character
+        *ngIf="cell"
+        [model]="cell"
+      ></marvel-character>
+    </div>
   </div>
 </div>
