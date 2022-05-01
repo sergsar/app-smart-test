@@ -17,7 +17,7 @@ export class CharacterListService {
 
   public getCharacter(id: number): Observable<MarvelCharacter> {
     this.store.dispatch(loadCharacter({ id }));
-    return this.getStoreCachedCharacter(id);
+    return this.getStoreCharacter(id);
   }
 
   public getCharactersNext(
@@ -64,7 +64,7 @@ export class CharacterListService {
     );
   }
 
-  private getStoreCachedCharacter(id: number): Observable<MarvelCharacter> {
+  private getStoreCharacter(id: number): Observable<MarvelCharacter> {
     return this.getStoreCharactersState().pipe(
       map((state: CharactersState) =>
         state.single?.find((item: MarvelCharacter) => item.id === id) as MarvelCharacter,
