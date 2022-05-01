@@ -5,4 +5,5 @@ export interface CharactersState extends BaseState{
   content?: MarvelCharacter[];
   summary?: MarvelCharacter[];
   cache?: MarvelCharacter[];
+  single?: MarvelCharacter[];
 }

@@ -76,7 +76,7 @@ export class CharacterListComponent implements OnDestroy {
     this.destroy$.next();
   }
 
-  public click(cellId: string): void {
+  public click(cellId: number): void {
     this.router.navigate(
       ['character', cellId],
       { relativeTo: this.route.parent },

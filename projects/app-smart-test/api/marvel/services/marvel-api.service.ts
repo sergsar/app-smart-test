@@ -13,7 +13,7 @@ import {
 import {MarvelCharacter, MarvelComics} from "@app-smart-test/entities";
 import {
   MarvelRequestAuthParams,
-  MarvelRequestParams
+  MarvelPaginatedRequestParams, MarvelRequestParams
 } from "../interfaces/marvel-api-request.interface";
 
 
@@ -26,7 +26,7 @@ export class MarvelApiService {
 
   }
 
-  public getCharacters(params?: MarvelRequestParams):Observable<MarvelApiResponse<MarvelCharacter>> {
+  public getCharacters(params?: MarvelPaginatedRequestParams): Observable<MarvelApiResponse<MarvelCharacter>> {
     return this.http.get<MarvelApiResponse<MarvelCharacter>>(
       `${MARVEL_BASE_URL}/characters`,
       {
@@ -38,7 +38,18 @@ export class MarvelApiService {
     );
   }
 
-  public getComics(characterId: string, params?: MarvelRequestParams): Observable<MarvelApiResponse<MarvelComics>> {
+  public getCharacter(id: number): Observable<MarvelApiResponse<MarvelCharacter>> {
+    return this.http.get<MarvelApiResponse<MarvelCharacter>>(
+      `${MARVEL_BASE_URL}/characters/${id}`,
+      {
+        params: {
+          ...this.getAuthParams(),
+        },
+      },
+    );
+  }
+
+  public getComics(characterId: string, params?: MarvelPaginatedRequestParams): Observable<MarvelApiResponse<MarvelComics>> {
     return this.http.get<MarvelApiResponse<MarvelComics>>(
       `${MARVEL_BASE_URL}/characters/${characterId}/comics`,
       {
@@ -58,13 +69,13 @@ export class MarvelApiService {
     };
   }
 
-  private processParams(params: MarvelRequestParams): MarvelRequestParams {
+  private processParams(params: any): any {
     if (!params) {
       return params;
     }
     let filtered: any = {};
-    (Object.keys(params) as (keyof MarvelRequestParams)[])
-      .forEach((key: keyof MarvelRequestParams) => {
+    (Object.keys(params) as (keyof MarvelPaginatedRequestParams)[])
+      .forEach((key: keyof MarvelPaginatedRequestParams) => {
       if (params[key] !== undefined) {
         filtered[key] = params[key];
       }

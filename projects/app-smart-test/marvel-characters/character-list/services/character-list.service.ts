@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {MarvelCharacter} from "@app-smart-test/entities";
 import {catchError, filter, map, Observable, of, switchMap} from "rxjs";
-import {characters, CharactersState, loadCharacters} from "@app-smart-test/contexts";
+import {characters, CharactersState, loadCharacter, loadCharacters} from "@app-smart-test/contexts";
 import {Character} from "../interfaces/character.interface";
 import {
   CharacterListDimensions
@@ -15,8 +15,9 @@ export class CharacterListService {
   ) {
   }
 
-  public getListCharacters(): Observable<MarvelCharacter[]> {
-    return this.getStoreCharacters();
+  public getCharacter(id: number): Observable<MarvelCharacter> {
+    this.store.dispatch(loadCharacter({ id }));
+    return this.getStoreCachedCharacter(id);
   }
 
   public getCharactersNext(
@@ -26,13 +27,13 @@ export class CharacterListService {
     let charactersAcc: MarvelCharacter[] = [];
     return next$.pipe(
       switchMap(() => {
+        console.log(charactersAcc.length); // TODO: Исправить. Выстреливает 2 раза т.к. сначала идёт next и потом store
         this.store.dispatch(loadCharacters({
           offset: charactersAcc.length,
           limit: dimensions.cellsCount * dimensions.rowsCount,
         }));
         return this.getStoreCharacters().pipe(
           map((results: MarvelCharacter[]) => {
-            console.log('results: ', results);
             charactersAcc = [...charactersAcc, ...results];
 
             const tree: Character[][] = [];
@@ -63,15 +64,30 @@ export class CharacterListService {
     );
   }
 
+  private getStoreCachedCharacter(id: number): Observable<MarvelCharacter> {
+    return this.getStoreCharactersState().pipe(
+      map((state: CharactersState) =>
+        state.single?.find((item: MarvelCharacter) => item.id === id) as MarvelCharacter,
+      ),
+      filter((result: MarvelCharacter) => !!result),
+    );
+  }
+
   private getStoreCharacters(): Observable<MarvelCharacter[]> {
+    return this.getStoreCharactersState().pipe(
+      map((state: CharactersState) => state.content as MarvelCharacter[]),
+      filter((result: MarvelCharacter[]) => !!result),
+    );
+  }
+
+  private getStoreCharactersState(): Observable<CharactersState> {
     return this.store.select(characters).pipe(
       filter((state: CharactersState) => state.state !== 'pending'),
       map((state: CharactersState) => {
-        console.log('state: ', state);
         if (state.state === 'error') {
           throw state.error;
         }
-        return state.content as MarvelCharacter[];
+        return state;
       }),
     );
   }

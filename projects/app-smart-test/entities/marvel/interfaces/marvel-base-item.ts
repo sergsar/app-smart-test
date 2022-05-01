@@ -1,5 +1,5 @@
 export interface MarvelBaseItem {
-  id: string;
+  id: number;
 }
 
 export interface MarvelCharacter extends MarvelBaseItem {

@@ -1,1 +1,6 @@
-<p>character works!</p>
+<div class="container" *ngIf="model$ | async as model">
+  <img
+    [src]="model?.thumbnail?.path + '/landscape_incredible.' + model?.thumbnail?.extension"
+    onerror="this.onerror=null; this.src='/assets/img/default-character.jpeg'"
+  >
+</div>

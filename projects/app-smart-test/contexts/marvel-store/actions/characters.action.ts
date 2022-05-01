@@ -1,7 +1,6 @@
 import {createAction, props} from "@ngrx/store";
 import {MarvelCharacter} from "@app-smart-test/entities";
-import {PaginationData} from "../interfaces/pagination-data";
-import {BasePayload} from "../interfaces/payloads";
+import {PaginatedPayload, SinglePayload} from "../interfaces/payloads";
 
 function createNsType(_ns: string): (s: string) => string {
   return (type: string): string => `${_ns} ${type}`;
@@ -17,7 +16,7 @@ export const loadCharactersSuccess = createAction(
     cache: MarvelCharacter[],
     content: MarvelCharacter[],
     summary: MarvelCharacter[],
-    pagination: PaginationData
+    single: MarvelCharacter[],
   }>(),
 );
 export const loadCharactersFailure = createAction(
@@ -29,5 +28,10 @@ export const loadCharactersFailure = createAction(
 );
 export const loadCharacters = createAction(
   ns('Load marvel characters'),
-  props<BasePayload>(),
+  props<PaginatedPayload>(),
+);
+
+export const loadCharacter = createAction(
+  ns('Load marvel character'),
+  props<SinglePayload>(),
 );

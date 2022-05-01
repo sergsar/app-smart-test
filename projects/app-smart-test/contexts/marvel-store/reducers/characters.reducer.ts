@@ -1,8 +1,6 @@
 import {createReducer, on} from "@ngrx/store";
 import {loadCharactersFailure, loadCharactersSuccess} from "../actions/characters.action";
 import {CharactersState} from "../interfaces/characters-state.interface";
-import {MarvelCharacter} from "@app-smart-test/entities";
-import {PaginationData} from "../interfaces/pagination-data";
 
 const initialState: CharactersState = {
   state: 'pending',
