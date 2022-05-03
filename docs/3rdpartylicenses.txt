@@ -14,7 +14,7 @@ MIT
 
 @app-smart-test/contexts
 
-@app-smart-test/marvel-charqacters
+@app-smart-test/marvel-characters
 
 @ngrx/effects
 MIT
