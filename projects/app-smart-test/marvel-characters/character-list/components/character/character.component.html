@@ -1,14 +1,14 @@
 <div class="container" *ngIf="model$ | async as model">
   <img
     class="item home"
-    src="/assets/img/home-icon.jpeg"
+    src="assets/img/home-icon.jpeg"
     (click)="home()"
   >
   <div class="header">
     <img
       class="item"
       [src]="model?.thumbnail?.path + '/standard_medium.' + model?.thumbnail?.extension"
-      onerror="this.onerror=null; this.src='/assets/img/default-character.jpeg'"
+      onerror="this.onerror=null; this.src='assets/img/default-character.jpeg'"
     >
     <div class="about">
       <h1 class="item text name">{{model.name}}</h1>
