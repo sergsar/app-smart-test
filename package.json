@@ -9,7 +9,7 @@
     "test": "ng test",
     "test:marvel-characters": "ng test @app-smart-test/marvel-characters",
     "build:app": "ng build --configuration production",
-    "build:app-github": "ng build --output-path docs --base-href app-smart-test --configuration production"
+    "build:app-github": "ng build --output-path docs --base-href /app-smart-test/ --configuration production"
   },
   "private": true,
   "dependencies": {
