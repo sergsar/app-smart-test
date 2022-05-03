@@ -23,8 +23,9 @@ export const comicsReducer = createReducer(
   ),
   on(
     loadCharacterComicsFailure,
-    (state: ComicsState): ComicsState => ({
+    (state: ComicsState, data: { error: unknown }): ComicsState => ({
       state: 'error',
+      ...data,
     }),
   ),
 );

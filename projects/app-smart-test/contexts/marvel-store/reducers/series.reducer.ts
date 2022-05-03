@@ -23,8 +23,9 @@ export const seriesReducer = createReducer(
   ),
   on(
     loadCharacterSeriesFailure,
-    (state: SeriesState): SeriesState => ({
+    (state: SeriesState, data: { error: unknown }): SeriesState => ({
       state: 'error',
+      ...data,
     }),
   ),
 );

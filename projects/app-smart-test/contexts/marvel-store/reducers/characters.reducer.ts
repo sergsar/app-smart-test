@@ -19,8 +19,9 @@ export const charactersReducer = createReducer(
   ),
   on(
     loadCharactersFailure,
-    (state: CharactersState): CharactersState => ({
+    (state: CharactersState, data: { error: unknown }): CharactersState => ({
       state: 'error',
+      ...data,
     }),
   ),
 );

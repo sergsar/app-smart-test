@@ -23,8 +23,9 @@ export const eventsReducer = createReducer(
   ),
   on(
     loadCharacterEventsFailure,
-    (state: EventsState): EventsState => ({
+    (state: EventsState, data: { error: unknown }): EventsState => ({
       state: 'error',
+      ...data,
     }),
   ),
 );

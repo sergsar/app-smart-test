@@ -23,8 +23,9 @@ export const storiesReducer = createReducer(
   ),
   on(
     loadCharacterStoriesFailure,
-    (state: StoriesState): StoriesState => ({
+    (state: StoriesState, data: { error: unknown }): StoriesState => ({
       state: 'error',
+      ...data,
     }),
   ),
 );
