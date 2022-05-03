@@ -7,12 +7,14 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:marvel-characters": "ng test @app-smart-test/marvel-characters",
     "build:app": "ng build --configuration production",
     "build:app-github": "ng build --output-path docs --base-href app-smart-test --configuration production"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~13.3.0",
+    "@angular/cdk": "^13.3.5",
     "@angular/common": "~13.3.0",
     "@angular/compiler": "~13.3.0",
     "@angular/core": "~13.3.0",

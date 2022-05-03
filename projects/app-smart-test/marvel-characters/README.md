@@ -1,23 +1,23 @@
-# MarvelCharqacters
+# MarvelCharacters
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.0.
 
 ## Code scaffolding
 
-Run `ng generate component component-name --project marvel-charqacters` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project marvel-charqacters`.
-> Note: Don't forget to add `--project marvel-charqacters` or else it will be added to the default project in your `angular.json` file. 
+Run `ng generate component component-name --project marvel-characters` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project marvel-characters`.
+> Note: Don't forget to add `--project marvel-characters` or else it will be added to the default project in your `angular.json` file. 
 
 ## Build
 
-Run `ng build marvel-charqacters` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `ng build marvel-characters` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Publishing
 
-After building your library with `ng build marvel-charqacters`, go to the dist folder `cd dist/marvel-charqacters` and run `npm publish`.
+After building your library with `ng build marvel-characters`, go to the dist folder `cd dist/marvel-characters` and run `npm publish`.
 
 ## Running unit tests
 
-Run `ng test marvel-charqacters` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `ng test marvel-characters` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## Further help
 

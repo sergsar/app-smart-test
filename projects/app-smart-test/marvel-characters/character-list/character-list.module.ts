@@ -23,51 +23,9 @@ import {
 import {
   StoriesListComponent
 } from "./components/stories-list/stories-list.component";
+import {characterListRoutes} from "./character-list-routes";
 
-const routers: Routes = [
-  {
-    path: '',
-    component: CharacterBoardComponent,
-    children: [
-      {
-        path: 'character-list',
-        component: CharacterListComponent,
-      },
-      {
-        path: 'character/:id',
-        component: CharacterComponent,
-        children: [
-          {
-            path: 'comics',
-            component: ComicsListComponent,
-          },
-          {
-            path: 'events',
-            component: EventsListComponent,
-          },
-          {
-            path: 'series',
-            component: SeriesListComponent,
-          },
-          {
-            path: 'stories',
-            component: StoriesListComponent,
-          },
-          {
-            path: '**',
-            pathMatch: 'full',
-            redirectTo: 'comics',
-          }
-        ],
-      },
-      {
-        path: '**',
-        pathMatch: 'full',
-        redirectTo: 'character-list',
-      },
-    ],
-  },
-];
+const routers: Routes = characterListRoutes;
 
 @NgModule({
   imports: [

@@ -1,14 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {EMPTY, map, Observable, Subject, takeUntil} from "rxjs";
+import {EMPTY, Observable, Subject} from "rxjs";
 import {CharacterListService} from "../../services/character-list.service";
-import {MarvelCharacter} from "@app-smart-test/entities";
 import {Character} from "../../interfaces/character.interface";
 
 @Component({
   selector: 'marvel-character',
   templateUrl: './character.component.html',
-  styleUrls: ['./character.component.scss']
+  styleUrls: ['./character.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CharacterComponent implements OnInit, OnDestroy {
 
@@ -37,11 +37,11 @@ export class CharacterComponent implements OnInit, OnDestroy {
     this.destroy$.next();
   }
 
-  public changeList(path: string): void {
-    this.router.navigate([path], { relativeTo: this.route })
+  public changeList(path: string): Promise<boolean> {
+    return this.router.navigate([path], { relativeTo: this.route })
   }
 
-  public home(): void {
-    this.router.navigate(['']);
+  public home(): Promise<boolean> {
+    return this.router.navigate(['']);
   }
 }

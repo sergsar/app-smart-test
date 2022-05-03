@@ -140,7 +140,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/app-smart-test/api/src/test.ts",
+            "main": "projects/app-smart-test/api/test.ts",
             "tsConfig": "projects/app-smart-test/api/tsconfig.spec.json",
             "karmaConfig": "projects/app-smart-test/api/karma.conf.js"
           }
@@ -171,7 +171,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/app-smart-test/contexts/src/test.ts",
+            "main": "projects/app-smart-test/contexts/test.ts",
             "tsConfig": "projects/app-smart-test/contexts/tsconfig.spec.json",
             "karmaConfig": "projects/app-smart-test/contexts/karma.conf.js"
           }
@@ -202,14 +202,14 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/app-smart-test/entities/src/test.ts",
+            "main": "projects/app-smart-test/entities/test.ts",
             "tsConfig": "projects/app-smart-test/entities/tsconfig.spec.json",
             "karmaConfig": "projects/app-smart-test/entities/karma.conf.js"
           }
         }
       }
     },
-    "@app-smart-test/marvel-charqacters": {
+    "@app-smart-test/marvel-characters": {
       "projectType": "library",
       "root": "projects/app-smart-test/marvel-characters",
       "sourceRoot": "projects/app-smart-test/marvel-characters/src",
@@ -218,14 +218,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/app-smart-test/marvel-charqacters/ng-package.json"
+            "project": "projects/app-smart-test/marvel-characters/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/app-smart-test/marvel-charqacters/tsconfig.lib.prod.json"
+              "tsConfig": "projects/app-smart-test/marvel-characters/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/app-smart-test/marvel-charqacters/tsconfig.lib.json"
+              "tsConfig": "projects/app-smart-test/marvel-characters/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -233,9 +233,9 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/app-smart-test/marvel-charqacters/src/test.ts",
-            "tsConfig": "projects/app-smart-test/marvel-charqacters/tsconfig.spec.json",
-            "karmaConfig": "projects/app-smart-test/marvel-charqacters/karma.conf.js"
+            "main": "projects/app-smart-test/marvel-characters/test.ts",
+            "tsConfig": "projects/app-smart-test/marvel-characters/tsconfig.spec.json",
+            "karmaConfig": "projects/app-smart-test/marvel-characters/karma.conf.js"
           }
         }
       }
