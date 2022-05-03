@@ -1,14 +1,19 @@
-
-<div class="list" *ngIf="model$ | async as model">
+<div class="header">
+  <div class="about">
+    <h3 class="item text name">The Marvel Api Test Application</h3>
+    <a href="https://developer.marvel.com">developer.marvel.com</a>
+  </div>
+</div>
+<div class="list" #list *ngIf="model$ | async as model">
   <div
     class="row"
     *ngFor="let row of model"
-    [style.height]="dimensions.rowHeight + 'px'"
+    [style.max-height]="'1000px'"
   >
     <div
       class="cell"
       (click)="click(cell.id)"
-      [style.width]="dimensions.cellMinWidth + 'px'"
+      [style.width]="dimensions.cellWidth"
       *ngFor="let cell of row"
     >
       <marvel-character-list-item

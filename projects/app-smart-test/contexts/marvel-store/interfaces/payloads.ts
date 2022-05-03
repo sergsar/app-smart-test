@@ -3,6 +3,8 @@ export interface PaginatedPayload {
   limit?: number;
 }
 
+export interface PaginatedSinglePayload extends PaginatedPayload, SinglePayload {}
+
 export interface SinglePayload {
   id: number;
 }

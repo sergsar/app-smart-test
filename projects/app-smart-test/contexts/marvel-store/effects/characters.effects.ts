@@ -17,6 +17,9 @@ import {CharactersState} from "../interfaces/characters-state.interface";
 @Injectable()
 export class CharactersEffects {
 
+  private cache?: MarvelCharacter[];
+  private summary?: MarvelCharacter[];
+
   @Effect() // TODO: Remove decorator
   public characters: any = this.actions.pipe(
     ofType(loadCharacters),
@@ -25,37 +28,33 @@ export class CharactersEffects {
         first(),
         switchMap((state: CharactersState) => {
           const offset: number = payload.offset || 0;
-          const limit: number = payload.limit || state.cache?.length!;
-          const cached: MarvelCharacter[] = state.cache
+          const limit: number = payload.limit || this.cache?.length!;
+          const cached: MarvelCharacter[] = this.cache
             ?.slice(offset, offset + limit)
             .filter(Boolean) || [];
           if (cached.length === limit) {
-            const summary: MarvelCharacter[] = state.cache?.filter(Boolean)!;
             return of(
               loadCharactersSuccess({
-                cache: state.cache!,
-                content: cached,
-                summary,
+                summary: this.summary!,
                 single: state.single!,
               }),
             );
           }
           return this.getCharacters(payload.offset, payload.limit).pipe(
             map((data: MarvelApiResponseData<MarvelCharacter>) => {
-              const cache: MarvelCharacter[] = state.cache ? [...state.cache] : new Array(data.total);
+              this.cache = this.cache ? [...this.cache] : new Array(data.total);
               for (let i = 0; i < data.count; i++) {
-                cache[data.offset + i] = data.results[i];
+                this.cache[data.offset + i] = data.results[i];
               }
+              this.summary = this.cache.filter(Boolean);
               return loadCharactersSuccess({
-                cache,
-                summary: cache.filter(Boolean),
-                content: data.results,
+                summary: this.cache.filter(Boolean),
                 single: state.single!,
               });
             }),
             catchError((error: unknown) => {
               console.error(error);
-              return of(loadCharactersFailure({ error, cache: state.cache! }));
+              return of(loadCharactersFailure({ error }));
             }),
           );
         }),
@@ -77,9 +76,7 @@ export class CharactersEffects {
             const single: MarvelCharacter[] = [...state.single || [], result];
             return of(
               loadCharactersSuccess({
-                cache: state.cache!,
-                content: state.content!,
-                summary: state.summary!,
+                summary: this.summary!,
                 single,
               }),
             );
@@ -88,15 +85,13 @@ export class CharactersEffects {
             map((data: MarvelApiResponseData<MarvelCharacter>) => {
               const single: MarvelCharacter[] = [...state.single || [], ...data.results];
               return loadCharactersSuccess({
-                cache: state.cache!,
-                content: state.content!,
-                summary: state.summary!,
+                summary: this.summary!,
                 single,
               });
             }),
             catchError((error: unknown) => {
               console.error(error);
-              return of(loadCharactersFailure({ error, cache: state.cache! }));
+              return of(loadCharactersFailure({ error }));
             }),
           );
         }),

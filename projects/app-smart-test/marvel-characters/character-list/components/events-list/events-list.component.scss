@@ -1,0 +1,14 @@
+:host {
+  .list {
+    margin: 1px;
+  }
+  .row {
+    display: flex;
+    flex-direction: row;
+  }
+  .cell {
+
+    flex: 1 0 auto;
+    margin: 2px;
+  }
+}

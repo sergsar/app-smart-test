@@ -1,6 +1,48 @@
 <div class="container" *ngIf="model$ | async as model">
   <img
-    [src]="model?.thumbnail?.path + '/landscape_incredible.' + model?.thumbnail?.extension"
-    onerror="this.onerror=null; this.src='/assets/img/default-character.jpeg'"
+    class="item home"
+    src="/assets/img/home-icon.jpeg"
+    (click)="home()"
   >
+  <div class="header">
+    <img
+      class="item"
+      [src]="model?.thumbnail?.path + '/standard_medium.' + model?.thumbnail?.extension"
+      onerror="this.onerror=null; this.src='/assets/img/default-character.jpeg'"
+    >
+    <div class="about">
+      <h1 class="item text name">{{model.name}}</h1>
+      <div class="item text description" *ngIf="model?.description">
+        <p>{{model?.description}}</p>
+      </div>
+      <div class="buttons">
+        <button
+          class="button"
+          (click)="changeList('comics')"
+          [class.selected]="tab === 'comics'"
+        >Comics</button>
+        <button
+          class="button"
+          (click)="changeList('stories')"
+          *ngIf="model?.stories?.items?.length"
+          [class.selected]="tab === 'stories'"
+        >Stories</button>
+        <button
+          class="button"
+          (click)="changeList('events')"
+          *ngIf="model?.events?.items?.length"
+          [class.selected]="tab === 'events'"
+        >Events</button>
+        <button
+          class="button"
+          (click)="changeList('series')"
+          *ngIf="model?.series?.items?.length"
+          [class.selected]="tab === 'series'"
+        >Series</button>
+      </div>
+    </div>
+  </div>
+  <div class="list">
+    <router-outlet></router-outlet>
+  </div>
 </div>

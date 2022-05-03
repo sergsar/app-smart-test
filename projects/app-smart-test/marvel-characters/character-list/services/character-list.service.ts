@@ -4,9 +4,10 @@ import {catchError, filter, map, Observable, of, switchMap} from "rxjs";
 import {characters, CharactersState, loadCharacter, loadCharacters} from "@app-smart-test/contexts";
 import {Character} from "../interfaces/character.interface";
 import {
-  CharacterListDimensions
-} from "../classes/character-list-dimensions";
+  ListDimensions
+} from "../classes/list-dimensions";
 import {Store} from "@ngrx/store";
+import {buildTree} from '../utils/tree.utils';
 
 @Injectable()
 export class CharacterListService {
@@ -15,49 +16,42 @@ export class CharacterListService {
   ) {
   }
 
-  public getCharacter(id: number): Observable<MarvelCharacter> {
+  public getCharacter(id: number): Observable<Character> {
     this.store.dispatch(loadCharacter({ id }));
-    return this.getStoreCharacter(id);
+    return this.getStoreCharacter(id).pipe(
+      map((result: MarvelCharacter) =>
+        this.convertToCharacter(result),
+      ),
+    );
   }
 
   public getCharactersNext(
-    dimensions: CharacterListDimensions,
+    dimensions: ListDimensions,
     next$: Observable<void>,
-  ): Observable<MarvelCharacter[][]> {
-    let charactersAcc: MarvelCharacter[] = [];
+  ): Observable<Character[][]> {
+    let acc: MarvelCharacter[] = [];
     return next$.pipe(
       switchMap(() => {
-        console.log(charactersAcc.length); // TODO: Исправить. Выстреливает 2 раза т.к. сначала идёт next и потом store
         this.store.dispatch(loadCharacters({
-          offset: charactersAcc.length,
-          limit: dimensions.cellsCount * dimensions.rowsCount,
+          offset: acc.length,
+          limit: dimensions.cellsCount * 3,
         }));
         return this.getStoreCharacters().pipe(
           map((results: MarvelCharacter[]) => {
-            charactersAcc = [...charactersAcc, ...results];
-
-            const tree: Character[][] = [];
-            const rowsCount: number = Math.ceil(charactersAcc.length / dimensions.cellsCount);
-            for (let i = 0; i < rowsCount; i++) {
-              const startIndex: number = dimensions.cellsCount * i;
-              const row: MarvelCharacter[] = charactersAcc.slice(startIndex, startIndex + dimensions.cellsCount);
-              const container: MarvelCharacter[] = new Array(dimensions.cellsCount);
-              Object.assign(container, row);
-              tree[i] = container.map((item: MarvelCharacter) => {
-                return {
-                  id: item.id,
-                  name: item.name,
-                  description: item.description,
-                  thumbnail: {
-                    extension: item.thumbnail.extension,
-                    path: item.thumbnail.path,
-                  },
-                };
-              });
-            }
-            console.log('Characters');
-            console.log(charactersAcc);
-            return tree;
+            acc = results;
+            return buildTree(
+              this.convertToCharacters(results),
+              dimensions,
+            );
+          }),
+          catchError((err) => {
+            console.error(err);
+            return of(
+              buildTree(
+                this.convertToCharacters(acc),
+                dimensions,
+              ),
+            );
           }),
         );
       }),
@@ -75,7 +69,7 @@ export class CharacterListService {
 
   private getStoreCharacters(): Observable<MarvelCharacter[]> {
     return this.getStoreCharactersState().pipe(
-      map((state: CharactersState) => state.content as MarvelCharacter[]),
+      map((state: CharactersState) => state.summary as MarvelCharacter[]),
       filter((result: MarvelCharacter[]) => !!result),
     );
   }
@@ -90,5 +84,27 @@ export class CharacterListService {
         return state;
       }),
     );
+  }
+
+  private convertToCharacters(items: MarvelCharacter[]): Character[] {
+    return items.map((item: MarvelCharacter) =>
+      this.convertToCharacter(item),
+    );
+  }
+
+  private convertToCharacter(item: MarvelCharacter): Character {
+    return {
+      id: item.id,
+      name: item.name,
+      description: item.description,
+      thumbnail: {
+        extension: item.thumbnail.extension,
+        path: item.thumbnail.path,
+      },
+      comics: item.comics,
+      events: item.events,
+      series: item.series,
+      stories: item.stories,
+    };
   }
 }

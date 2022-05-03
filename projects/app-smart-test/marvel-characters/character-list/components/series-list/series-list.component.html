@@ -1,0 +1,17 @@
+<div class="list" #list *ngIf="model$ | async as model">
+  <div
+    class="row"
+    *ngFor="let row of model"
+  >
+    <div
+      class="cell"
+      [style.width]="dimensions.cellWidth"
+      *ngFor="let cell of row"
+    >
+      <marvel-comics-list-item
+        *ngIf="cell"
+        [model]="cell"
+      ></marvel-comics-list-item>
+    </div>
+  </div>
+</div>

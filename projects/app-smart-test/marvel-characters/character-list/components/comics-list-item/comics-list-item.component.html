@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="item image">
+    <img
+      [src]="model?.thumbnail?.path + '/landscape_xlarge.' + model?.thumbnail?.extension"
+      onerror="this.onerror=null; this.src='/assets/img/default-comics.jpeg'"
+    >
+  </div>
+  <div class="item text title">
+    <p>{{model?.title}}</p>
+  </div>
+  <div class="item text description" *ngIf="model?.description">
+    <div [innerHTML]="model?.description"></div>
+  </div>
+</div>

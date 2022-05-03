@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {EMPTY, map, Observable, Subject, takeUntil} from "rxjs";
 import {CharacterListService} from "../../services/character-list.service";
 import {MarvelCharacter} from "@app-smart-test/entities";
@@ -14,29 +14,34 @@ export class CharacterComponent implements OnInit, OnDestroy {
 
   public model$: Observable<Character> = EMPTY;
 
+  public id?: number;
+
   private readonly destroy$: Subject<void> = new Subject();
 
+  get tab(): string {
+    return this.route.firstChild?.snapshot?.url[0].path!;
+  }
+
   constructor(
-    private readonly activatedRoute: ActivatedRoute,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly characterListService: CharacterListService,
   ) { }
 
   public ngOnInit(): void {
-    const id: string = this.activatedRoute.snapshot.paramMap.get('id')!;
-    this.model$ = this.characterListService.getCharacter(+id).pipe(
-      map((item: MarvelCharacter) => ({
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        thumbnail: {
-          extension: item.thumbnail.extension,
-          path: item.thumbnail.path,
-        },
-      })),
-    );
+    this.id = +this.route.snapshot.paramMap.get('id')!;
+    this.model$ = this.characterListService.getCharacter(this.id);
   }
 
   public ngOnDestroy() {
     this.destroy$.next();
+  }
+
+  public changeList(path: string): void {
+    this.router.navigate([path], { relativeTo: this.route })
+  }
+
+  public home(): void {
+    this.router.navigate(['']);
   }
 }

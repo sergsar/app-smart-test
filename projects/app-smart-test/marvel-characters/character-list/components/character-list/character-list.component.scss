@@ -1,6 +1,18 @@
 :host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-direction: column;
+  .header {
+    color: white;
+    margin: 12px;
+    :link, :visited, :hover, :active {
+      color: white;
+    }
+  }
   .list {
     margin: 1px;
+    overflow: auto;
   }
   .row {
     display: flex;

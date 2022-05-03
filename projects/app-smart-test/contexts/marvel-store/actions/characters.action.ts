@@ -13,8 +13,6 @@ const ns: createNsFn = createNsType('[MARVEL CHARACTERS]');
 export const loadCharactersSuccess = createAction(
   ns('Load marvel characters success'),
   props<{
-    cache: MarvelCharacter[],
-    content: MarvelCharacter[],
     summary: MarvelCharacter[],
     single: MarvelCharacter[],
   }>(),
@@ -23,7 +21,6 @@ export const loadCharactersFailure = createAction(
   ns('Load marvel characters failure'),
   props<{
     error: unknown,
-    cache: MarvelCharacter[],
   }>(),
 );
 export const loadCharacters = createAction(

@@ -10,7 +10,7 @@ import {
 import {
   MarvelApiResponse,
 } from "../interfaces/marvel-api-response.interface";
-import {MarvelCharacter, MarvelComics} from "@app-smart-test/entities";
+import {MarvelCharacter, MarvelComics, MarvelEvent, MarvelSeries, MarvelStory} from "@app-smart-test/entities";
 import {
   MarvelRequestAuthParams,
   MarvelPaginatedRequestParams, MarvelRequestParams
@@ -49,9 +49,45 @@ export class MarvelApiService {
     );
   }
 
-  public getComics(characterId: string, params?: MarvelPaginatedRequestParams): Observable<MarvelApiResponse<MarvelComics>> {
+  public getComics(characterId: number, params?: MarvelPaginatedRequestParams): Observable<MarvelApiResponse<MarvelComics>> {
     return this.http.get<MarvelApiResponse<MarvelComics>>(
       `${MARVEL_BASE_URL}/characters/${characterId}/comics`,
+      {
+        params: {
+          ...this.getAuthParams(),
+          ...this.processParams(params!),
+        },
+      },
+    );
+  }
+
+  public getStories(characterId: number, params?: MarvelPaginatedRequestParams): Observable<MarvelApiResponse<MarvelStory>> {
+    return this.http.get<MarvelApiResponse<MarvelComics>>(
+      `${MARVEL_BASE_URL}/characters/${characterId}/stories`,
+      {
+        params: {
+          ...this.getAuthParams(),
+          ...this.processParams(params!),
+        },
+      },
+    );
+  }
+
+  public getEvents(characterId: number, params?: MarvelPaginatedRequestParams): Observable<MarvelApiResponse<MarvelEvent>> {
+    return this.http.get<MarvelApiResponse<MarvelComics>>(
+      `${MARVEL_BASE_URL}/characters/${characterId}/events`,
+      {
+        params: {
+          ...this.getAuthParams(),
+          ...this.processParams(params!),
+        },
+      },
+    );
+  }
+
+  public getSeries(characterId: number, params?: MarvelPaginatedRequestParams): Observable<MarvelApiResponse<MarvelSeries>> {
+    return this.http.get<MarvelApiResponse<MarvelComics>>(
+      `${MARVEL_BASE_URL}/characters/${characterId}/series`,
       {
         params: {
           ...this.getAuthParams(),
