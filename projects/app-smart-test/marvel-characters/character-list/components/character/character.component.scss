@@ -49,9 +49,11 @@
   .buttons {
     display: flex;
     flex-direction: row;
+    z-index: 999;
     :hover, .selected {
       border: 1px solid lightgreen;
     }
+    margin-top: 8px;
   }
   .button {
     background-color: transparent;
