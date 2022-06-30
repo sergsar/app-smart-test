@@ -6,7 +6,7 @@ import {MarvelStoreModule} from "@app-smart-test/contexts";
 import { CharacterListItemComponent } from './components/character-list-item/character-list-item.component';
 import {CommonModule} from "@angular/common";
 import { CharacterComponent } from './components/character/character.component';
-import {CharacterListService} from "@app-smart-test/marvel-characters/character-list/services/character-list.service";
+import {CharacterListService} from "./services/character-list.service";
 import { ComicsListComponent } from './components/comics-list/comics-list.component';
 import {ViewportInfoService} from "./services/viewport-info.service";
 import {ComicsListService} from "./services/comics-list.service";

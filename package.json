@@ -9,6 +9,10 @@
     "test": "ng test",
     "test:marvel-characters": "ng test @app-smart-test/marvel-characters",
     "build:app": "ng build --configuration production",
+    "build:contexts": "ng build @app-smart-test/contexts --configuration production",
+    "build:entities": "ng build @app-smart-test/entities --configuration production",
+    "build:api": "ng build @app-smart-test/api --configuration production",
+    "build:marvel-characters": "ng build @app-smart-test/marvel-characters --configuration production",
     "build:app-github": "ng build --output-path docs --base-href /app-smart-test/ --configuration production"
   },
   "private": true,

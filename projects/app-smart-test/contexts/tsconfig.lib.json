@@ -6,7 +6,13 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "types": [],
+    "paths": {
+      "@app-smart-test/entities": ["./dist/app-smart-test/entities/index"],
+      "@app-smart-test/entities/*": ["./dist/app-smart-test/entities/*"],
+      "@app-smart-test/api": ["./dist/app-smart-test/api/index"],
+      "@app-smart-test/api/*": ["./dist/app-smart-test/api/*"]
+    }
   },
   "exclude": [
     "test.ts",
